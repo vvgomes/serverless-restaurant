@@ -1,22 +1,23 @@
 package com.serverless;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import java.util.Map;
+
+import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 public class Response {
 
 	private final String message;
 	private final Map<String, Object> input;
 
-	public Response(String message, Map<String, Object> input) {
+	Response(final String message, final Map<String, Object> input) {
 		this.message = message;
 		this.input = input;
 	}
 
-	public String getMessage() {
-		return this.message;
-	}
-
-	public Map<String, Object> getInput() {
-		return this.input;
-	}
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this, JSON_STYLE);
+  }
 }
