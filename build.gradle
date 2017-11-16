@@ -32,3 +32,7 @@ task buildZip(type: Zip) {
 }
 
 build.dependsOn buildZip
+
+task deploy(type: Exec, dependsOn: build) {
+  commandLine 'serverless', 'deploy'
+}
