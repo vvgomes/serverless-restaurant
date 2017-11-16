@@ -1,6 +1,2 @@
-update
-upgrade
-
-install awscli
-
-cleanup
+brew "awscli"
+brew "node"
