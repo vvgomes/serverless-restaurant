@@ -1,0 +1,12 @@
+service: serverless-cqrs
+frameworkVersion: "=1.24.1"
+provider:
+  name: aws
+  runtime: java8
+
+package:
+  artifact: build/distributions/serverless-cqrs.zip
+
+functions:
+  hello:
+    handler: com.serverless.Handler

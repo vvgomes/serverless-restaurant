@@ -1,0 +1,34 @@
+apply plugin: 'java'
+
+repositories {
+  mavenLocal()
+  jcenter()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+  // AWS Lambda
+  compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.1.0'
+  // Logging
+  compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.25'
+  compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+  compile group: 'com.amazonaws', name: 'aws-lambda-java-log4j', version: '1.0.0'
+
+  // Jackson
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.8.5'
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.5'
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.8.5'
+}
+
+task buildZip(type: Zip) {
+  baseName = rootProject.name
+  from compileJava
+  from processResources
+  into('lib') {
+    from configurations.runtime
+  }
+}
+
+build.dependsOn buildZip
