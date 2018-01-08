@@ -1,12 +1,13 @@
 service: serverless-cqrs
+
 frameworkVersion: "=1.24.1"
 provider:
   name: aws
-  runtime: java8
+  runtime: nodejs6.10
 
-package:
-  artifact: build/distributions/serverless-cqrs.zip
+stage: dev
+region: us-east-1
 
 functions:
   hello:
-    handler: com.serverless.Handler
+    handler: handler.hello
