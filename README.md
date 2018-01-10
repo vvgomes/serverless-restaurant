@@ -15,7 +15,7 @@ Note:
 
 ## Deploy
 ```bash
-./gradlew deploy
+serverless deploy
 ```
 
 ## Test
