@@ -1,0 +1,2 @@
+- Add Orders service with a listener for menu items;
+- DynamoDB scan to retrieve all events by aggregate id;

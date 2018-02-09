@@ -1,0 +1,105 @@
+service: serverless-pizza-menu
+
+plugins:
+  - serverless-offline-sns
+  - serverless-dynamodb-local
+  - serverless-offline #serverless-offline needs to be last in the list
+
+custom:
+  dynamodb:
+    start:
+      migrate: true
+  serverless-offline-sns:
+    port: 4002
+    debug: true
+  serverless-offline:
+    babelOptions:
+      presets: ["env"]
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - "sns:*"
+      Resource:
+        - { "Fn::GetAtt": ["EventsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["MenuItemsDynamoDBTable", "Arn" ] }
+        - "arn:aws:sns:us-east-1:${ssm:accountId}:menu-events"
+  environment:
+    TOPIC_NAME: 'menu-events'
+    AWS_ACCOUNT_ID: '${ssm:accountId}'
+    EVENTS_TABLE: 'events-table-${self:provider.stage}'
+    MENU_ITEMS_TABLE: 'menu-items-table-${self:provider.stage}'
+
+functions:
+  addMenuItem:
+    handler: api.handler
+    events:
+      - http: 'POST /menu/items/commands/add'
+  getMenuItem:
+    handler: api.handler
+    events:
+      - http: 'GET /menu/items/{proxy+}'
+  getMenuItems:
+    handler: api.handler
+    events:
+      - http: 'GET /menu/items/'
+  getEvents:
+    handler: api.handler
+    events:
+      - http: 'GET /events/'
+  persistEvent:
+    handler: listeners.persistEvent
+    events:
+      - sns:
+          topicName: menu-events
+          displayName: "Menu domain events"
+  persistMenuItem:
+    handler: listeners.persistMenuItem
+    events:
+      - sns:
+          topicName: menu-events
+          displayName: "Menu domain events"
+
+resources:
+  Resources:
+    EventsDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: 'events-table-${self:provider.stage}'
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    MenuItemsDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: 'menu-items-table-${self:provider.stage}'
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
