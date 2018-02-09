@@ -11,8 +11,8 @@ echo "Events:"
 curl -H "Content-Type: application/json" ${SERVICE_URL}/events
 echo
 
-echo "addMenuItem command:"
-curl -H "Content-Type: application/json" -d '{"description":"peperoni", "price":10.0}' ${SERVICE_URL}/menu/items/commands/add
+echo "openOrder command:"
+curl -H "Content-Type: application/json" -d '{"customerId":"42"}' ${SERVICE_URL}/orders/commands/open
 echo
 
 echo "Events:"
