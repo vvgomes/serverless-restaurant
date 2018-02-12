@@ -2,7 +2,7 @@
   "name": "serverless-cqrs-orders",
   "version": "1.0.0",
   "description": "",
-  "main": "api.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha --require babel-register --recursive"
   },

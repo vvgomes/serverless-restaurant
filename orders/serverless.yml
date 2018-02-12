@@ -47,36 +47,36 @@ provider:
 
 functions:
   openOrder:
-    handler: api.handler
+    handler: index.handleCommand
     events:
       - http: 'POST /orders/commands/open'
   getOrder:
-    handler: api.handler
+    handler: index.handleQuery
     events:
       - http: 'GET /orders/{proxy+}'
   getOrders:
-    handler: api.handler
+    handler: index.handleQuery
     events:
       - http: 'GET /orders'
   persistEvent:
-    handler: listeners.persistEvent
+    handler: index.persistEvent
     events:
       - sns:
           topicName: orders-events
           displayName: "Orders domain events"
   persistOrder:
-    handler: listeners.persistOrder
+    handler: index.persistOrder
     events:
       - sns:
           topicName: orders-events
           displayName: "Orders domain events"
   persistMenuItem:
-    handler: listeners.persistMenuItem
+    handler: index.persistMenuItem
     events:
       - sns:
           arn: 'arn:aws:sns:us-east-1:${ssm:accountId}:menu-events'
   persistCustomer:
-    handler: listeners.persistCustomer
+    handler: index.persistCustomer
     events:
       - sns:
           arn: 'arn:aws:sns:us-east-1:${ssm:accountId}:customers-events'
