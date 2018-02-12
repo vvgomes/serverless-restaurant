@@ -5,12 +5,11 @@ const createDatabaseClient = require("./lib/db");
 const createEventBusClient = require("./lib/bus");
 const Customer = require("./lib/customer.aggregate");
 
-const EVENTS = process.env.EVENTS_TABLE;
-const CUSTOMERS = process.env.CUSTOMERS_TABLE;
-
 const app = express();
 const db = createDatabaseClient();
 const bus = createEventBusClient();
+
+const CUSTOMERS = process.env.CUSTOMERS_TABLE;
 
 app.use(bodyParser.json({ strict: false }));
 
@@ -46,10 +45,6 @@ app.get("/customers/:id", (req, res) => {
   const success = customer => res.json(customer);
   const failure = error => res.status(404);
   db.find(CUSTOMERS, req.params.id, success, failure);
-});
-
-app.get("/events", (req, res) => {
-  db.all(EVENTS, events => res.json(events));
 });
 
 module.exports.handler = serverless(app);

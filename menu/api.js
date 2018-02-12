@@ -5,12 +5,11 @@ const createDatabaseClient = require("./lib/db");
 const createEventBusClient = require("./lib/bus");
 const MenuItem = require("./lib/menu.item.aggregate");
 
-const EVENTS = process.env.EVENTS_TABLE;
-const MENU_ITEMS = process.env.MENU_ITEMS_TABLE;
-
 const app = express();
 const db = createDatabaseClient();
 const bus = createEventBusClient();
+
+const MENU_ITEMS = process.env.MENU_ITEMS_TABLE;
 
 app.use(bodyParser.json({ strict: false }));
 
@@ -47,10 +46,6 @@ app.get("/menu/items/:id", (req, res) => {
   const success = menuItem => res.json(menuItem);
   const failure = error => res.status(404);
   db.find(MENU_ITEMS, req.params.id, success, failure);
-});
-
-app.get("/events", (req, res) => {
-  db.all(EVENTS, events => res.json(events));
 });
 
 module.exports.handler = serverless(app);

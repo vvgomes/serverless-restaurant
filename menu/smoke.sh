@@ -7,17 +7,11 @@ echo "Menu items:"
 curl -H "Content-Type: application/json" ${SERVICE_URL}/menu/items
 echo
 
-echo "Events:"
-curl -H "Content-Type: application/json" ${SERVICE_URL}/events
-echo
-
 echo "addMenuItem command:"
 curl -H "Content-Type: application/json" -d '{"description":"peperoni", "price":10.0}' ${SERVICE_URL}/menu/items/commands/add
 echo
 
-echo "Events:"
-curl -H "Content-Type: application/json" ${SERVICE_URL}/events
-echo
+sleep 3
 
 echo "Menu items:"
 curl -H "Content-Type: application/json" ${SERVICE_URL}/menu/items

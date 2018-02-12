@@ -33,6 +33,7 @@ provider:
         - "sns:*"
       Resource:
         - { "Fn::GetAtt": ["OrdersEventsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["OrdersOrdersDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["OrdersMenuItemsDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["OrdersCustomersDynamoDBTable", "Arn" ] }
         - "arn:aws:sns:us-east-1:${ssm:accountId}:orders-events"
@@ -40,6 +41,7 @@ provider:
     TOPIC_NAME: 'orders-events'
     AWS_ACCOUNT_ID: '${ssm:accountId}'
     EVENTS_TABLE: 'orders-events-table-${self:provider.stage}'
+    ORDERS_TABLE: 'orders-orders-table-${self:provider.stage}'
     MENU_ITEMS_TABLE: 'orders-menu-items-table-${self:provider.stage}'
     CUSTOMERS_TABLE: 'orders-customers-table-${self:provider.stage}'
 
@@ -48,14 +50,26 @@ functions:
     handler: api.handler
     events:
       - http: 'POST /orders/commands/open'
-  getMenuItems:
+  getOrder:
     handler: api.handler
     events:
-      - http: 'GET /menu/items'
-  getCustomers:
+      - http: 'GET /orders/{proxy+}'
+  getOrders:
     handler: api.handler
     events:
-      - http: 'GET /customers'
+      - http: 'GET /orders'
+  persistEvent:
+    handler: listeners.persistEvent
+    events:
+      - sns:
+          topicName: orders-events
+          displayName: "Orders domain events"
+  persistOrder:
+    handler: listeners.persistOrder
+    events:
+      - sns:
+          topicName: orders-events
+          displayName: "Orders domain events"
   persistMenuItem:
     handler: listeners.persistMenuItem
     events:
@@ -73,6 +87,21 @@ resources:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: 'orders-events-table-${self:provider.stage}'
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    OrdersOrdersDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: 'orders-orders-table-${self:provider.stage}'
         AttributeDefinitions:
           -
             AttributeName: id

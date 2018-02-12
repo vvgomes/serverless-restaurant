@@ -7,17 +7,11 @@ echo "Customers"
 curl -H "Content-Type: application/json" ${SERVICE_URL}/customers
 echo
 
-echo "Events:"
-curl -H "Content-Type: application/json" ${SERVICE_URL}/events
-echo
-
 echo "signUpCustomer command:"
 curl -H "Content-Type: application/json" -d '{"email":"folklover@gmail.com"}' ${SERVICE_URL}/customers/commands/signup
 echo
 
-echo "Events:"
-curl -H "Content-Type: application/json" ${SERVICE_URL}/events
-echo
+sleep 3
 
 echo "Customers"
 curl -H "Content-Type: application/json" ${SERVICE_URL}/customers

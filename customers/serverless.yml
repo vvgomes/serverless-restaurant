@@ -54,10 +54,6 @@ functions:
     handler: api.handler
     events:
       - http: 'GET /customers'
-  getEvents:
-    handler: api.handler
-    events:
-      - http: 'GET /events'
   persistEvent:
     handler: listeners.persistEvent
     events:

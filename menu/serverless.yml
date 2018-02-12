@@ -54,10 +54,6 @@ functions:
     handler: api.handler
     events:
       - http: 'GET /menu/items/'
-  getEvents:
-    handler: api.handler
-    events:
-      - http: 'GET /events/'
   persistEvent:
     handler: listeners.persistEvent
     events:

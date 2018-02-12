@@ -5,13 +5,11 @@ const createDatabaseClient = require("./lib/db");
 const createEventBusClient = require("./lib/bus");
 const Order = require("./lib/order.aggregate");
 
-const EVENTS = process.env.EVENTS_TABLE;
-const MENU_ITEMS = process.env.MENU_ITEMS_TABLE;
-const CUSTOMERS = process.env.CUSTOMERS_TABLE;
-
 const app = express();
 const db = createDatabaseClient();
 const bus = createEventBusClient();
+
+const ORDERS = process.env.ORDERS_TABLE;
 
 app.use(bodyParser.json({ strict: false }));
 
@@ -33,16 +31,14 @@ app.post("/orders/commands/open", (req, res) => {
   });
 });
 
-app.get("/menu/items", (req, res) => {
-  db.all(MENU_ITEMS, menuItems => res.json(menuItems));
+app.get("/orders", (req, res) => {
+  db.all(ORDERS, orders => res.json(orders));
 });
 
-app.get("/customers", (req, res) => {
-  db.all(CUSTOMERS, customers => res.json(customers));
-});
-
-app.get("/events", (req, res) => {
-  db.all(EVENTS, events => res.json(events));
+app.get("/orders/:id", (req, res) => {
+  const success = order => res.json(order);
+  const failure = error => res.status(404);
+  db.find(ORDERS, req.params.id, success, failure);
 });
 
 module.exports.handler = serverless(app);
