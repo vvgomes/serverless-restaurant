@@ -1,4 +1,4 @@
-service: serverless-pizza-menu
+service: serverless-cqrs-customers
 
 plugins:
   - serverless-offline-sns
@@ -32,51 +32,51 @@ provider:
         - dynamodb:DeleteItem
         - "sns:*"
       Resource:
-        - { "Fn::GetAtt": ["EventsDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["MenuItemsDynamoDBTable", "Arn" ] }
-        - "arn:aws:sns:us-east-1:${ssm:accountId}:menu-events"
+        - { "Fn::GetAtt": ["CustomersEventsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["CustomersCustomersDynamoDBTable", "Arn" ] }
+        - "arn:aws:sns:us-east-1:${ssm:accountId}:customers-events"
   environment:
-    TOPIC_NAME: 'menu-events'
+    TOPIC_NAME: 'customers-events'
     AWS_ACCOUNT_ID: '${ssm:accountId}'
-    EVENTS_TABLE: 'events-table-${self:provider.stage}'
-    MENU_ITEMS_TABLE: 'menu-items-table-${self:provider.stage}'
+    EVENTS_TABLE: 'customers-events-table-${self:provider.stage}'
+    CUSTOMERS_TABLE: 'customers-customers-table-${self:provider.stage}'
 
 functions:
-  addMenuItem:
+  signUpCustomer:
     handler: api.handler
     events:
-      - http: 'POST /menu/items/commands/add'
-  getMenuItem:
+      - http: 'POST /customers/commands/signup'
+  getCustomer:
     handler: api.handler
     events:
-      - http: 'GET /menu/items/{proxy+}'
-  getMenuItems:
+      - http: 'GET /customers/{proxy+}'
+  getCustomers:
     handler: api.handler
     events:
-      - http: 'GET /menu/items/'
+      - http: 'GET /customers'
   getEvents:
     handler: api.handler
     events:
-      - http: 'GET /events/'
+      - http: 'GET /events'
   persistEvent:
     handler: listeners.persistEvent
     events:
       - sns:
-          topicName: menu-events
-          displayName: "Menu domain events"
-  persistMenuItem:
-    handler: listeners.persistMenuItem
+          topicName: customers-events
+          displayName: "Customers domain events"
+  persistCustomer:
+    handler: listeners.persistCustomer
     events:
       - sns:
-          topicName: menu-events
-          displayName: "Menu domain events"
+          topicName: customers-events
+          displayName: "Customers domain events"
 
 resources:
   Resources:
-    EventsDynamoDBTable:
+    CustomersEventsDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: 'events-table-${self:provider.stage}'
+        TableName: 'customers-events-table-${self:provider.stage}'
         AttributeDefinitions:
           -
             AttributeName: id
@@ -88,10 +88,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-    MenuItemsDynamoDBTable:
+    CustomersCustomersDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: 'menu-items-table-${self:provider.stage}'
+        TableName: 'customers-customers-table-${self:provider.stage}'
         AttributeDefinitions:
           -
             AttributeName: id
