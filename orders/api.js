@@ -7,6 +7,7 @@ const Order = require("./lib/order.aggregate");
 
 const EVENTS = process.env.EVENTS_TABLE;
 const MENU_ITEMS = process.env.MENU_ITEMS_TABLE;
+const CUSTOMERS = process.env.CUSTOMERS_TABLE;
 
 const app = express();
 const db = createDatabaseClient();
@@ -34,6 +35,10 @@ app.post("/orders/commands/open", (req, res) => {
 
 app.get("/menu/items", (req, res) => {
   db.all(MENU_ITEMS, menuItems => res.json(menuItems));
+});
+
+app.get("/customers", (req, res) => {
+  db.all(CUSTOMERS, customers => res.json(customers));
 });
 
 app.get("/events", (req, res) => {

@@ -22,3 +22,7 @@ echo
 echo "Menu items:"
 curl -H "Content-Type: application/json" ${SERVICE_URL}/menu/items
 echo
+
+echo "Customers:"
+curl -H "Content-Type: application/json" ${SERVICE_URL}/customers
+echo

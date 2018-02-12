@@ -34,12 +34,14 @@ provider:
       Resource:
         - { "Fn::GetAtt": ["OrdersEventsDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["OrdersMenuItemsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["OrdersCustomersDynamoDBTable", "Arn" ] }
         - "arn:aws:sns:us-east-1:${ssm:accountId}:orders-events"
   environment:
     TOPIC_NAME: 'orders-events'
     AWS_ACCOUNT_ID: '${ssm:accountId}'
     EVENTS_TABLE: 'orders-events-table-${self:provider.stage}'
     MENU_ITEMS_TABLE: 'orders-menu-items-table-${self:provider.stage}'
+    CUSTOMERS_TABLE: 'orders-customers-table-${self:provider.stage}'
 
 functions:
   openOrder:
@@ -49,12 +51,21 @@ functions:
   getMenuItems:
     handler: api.handler
     events:
-      - http: 'GET /menu/items/'
+      - http: 'GET /menu/items'
+  getCustomers:
+    handler: api.handler
+    events:
+      - http: 'GET /customers'
   persistMenuItem:
     handler: listeners.persistMenuItem
     events:
       - sns:
           arn: 'arn:aws:sns:us-east-1:${ssm:accountId}:menu-events'
+  persistCustomer:
+    handler: listeners.persistCustomer
+    events:
+      - sns:
+          arn: 'arn:aws:sns:us-east-1:${ssm:accountId}:customers-events'
 
 resources:
   Resources:
@@ -77,6 +88,21 @@ resources:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: 'orders-menu-items-table-${self:provider.stage}'
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    OrdersCustomersDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: 'orders-customers-table-${self:provider.stage}'
         AttributeDefinitions:
           -
             AttributeName: id
