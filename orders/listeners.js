@@ -21,6 +21,7 @@ module.exports.persistEvent = (message, context, callback) => {
 };
 
 module.exports.persistMenuItem = (message, context, callback) => {
+  console.log("Got the event here!", message);
   const event = parseEvent(message);
 
   if (event.type !== "menuItemAdded") return;
