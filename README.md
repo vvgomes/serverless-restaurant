@@ -1,24 +1,30 @@
 # serverless-cqrs
-Sample CQRS example using AWS Lambda 
+Sample CQRS example using AWS Lambda and the Serverless framework 
 
-## Installation
+## Building & Deploying
 ```bash
  brew bundle
  npm install -g serverless
- serverless login
+ sls login
  open https://serverless.com/framework/docs/providers/aws/guide/credentials/
  aws configure
+ aws ssm put-parameter --name accountId --type String --value <your-12-digit-account-id> --region us-east-1
+ cd menu
+ npm install
+ sls dynamodb install
+ sls deploy
+ cd ../customers
+ npm install
+ sls dynamodb install
+ sls deploy
+ cd ../orders
+ npm install
+ sls dynamodb install
+ sls deploy
 ```
-Note:
-* We're working on a toolchain to automate the setup process.
-* Key generation will still be a manual process
 
-## Deploy
-```bash
-serverless deploy
-```
+Every deploy (`sls deploy`) will create a Serverless instance that can be managed through a [dashboard](https://platform.serverless.com/). Find sample command/query requests in the `smoke.sh` file in each service directory. To see the database, access the [DynamoDB console](https://console.aws.amazon.com/dynamodb/).
 
-## Test
-```bash
-serverless invoke -f hello -l -d '{"key": "value"}'
-```
+DynamoDB Console
+https://console.aws.amazon.com/dynamod://console.aws.amazon.com/dynamodb
+
