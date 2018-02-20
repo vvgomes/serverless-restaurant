@@ -14,6 +14,10 @@ const MENU_ITEMS = process.env.MENU_ITEMS_TABLE;
 app.use(bodyParser.json({ strict: false }));
 
 app.post("/menu/items/commands/add", (req, res) => {
+  if (req.body.description === "simulate error") {
+    throw "Simulated error";
+  }
+
   const command = {
     type: "addMenuItem",
     payload: {
