@@ -34,7 +34,10 @@ const commandHandlers = {
 
 const eventHandlers = {
   menuItemAdded: (state, event) => {
-    return state;
+    return {
+      price: event.payload.price,
+      description: event.payload.description
+    };
   }
 };
 
