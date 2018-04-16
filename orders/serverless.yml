@@ -1,4 +1,4 @@
-service: serverless-cqrs-orders
+service: serverless-restaurant-orders
 
 plugins:
   - serverless-offline-sns
@@ -46,37 +46,39 @@ provider:
     CUSTOMERS_TABLE: 'orders-customers-table-${self:provider.stage}'
 
 functions:
-  openOrder:
-    handler: index.handleCommand
+  handleCommand:
+    handler: lib/commands.handler
     events:
-      - http: 'POST /orders/commands/open'
-  getOrder:
-    handler: index.handleQuery
-    events:
-      - http: 'GET /orders/{proxy+}'
-  getOrders:
-    handler: index.handleQuery
+      - http: 'POST /commands'
+
+  handleQuery:
+    handler: lib/queries.handler
     events:
       - http: 'GET /orders'
+      - http: 'GET /orders/{proxy+}'
+
   persistEvent:
-    handler: index.persistEvent
+    handler: lib/listeners.persistEvent
     events:
       - sns:
           topicName: orders-events
           displayName: "Orders domain events"
+
   persistOrder:
-    handler: index.persistOrder
+    handler: lib/listeners.persistOrder
     events:
       - sns:
           topicName: orders-events
           displayName: "Orders domain events"
+
   persistMenuItem:
-    handler: index.persistMenuItem
+    handler: lib/listeners.persistMenuItem
     events:
       - sns:
           arn: 'arn:aws:sns:us-east-1:${ssm:accountId}:menu-events'
+
   persistCustomer:
-    handler: index.persistCustomer
+    handler: lib/listeners.persistCustomer
     events:
       - sns:
           arn: 'arn:aws:sns:us-east-1:${ssm:accountId}:customers-events'

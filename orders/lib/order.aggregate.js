@@ -1,6 +1,6 @@
 const { defineAggregate } = require("bravent");
 const validate = require("predicado").validate;
-const now = require("./utc.clock");
+const now = require("./framework/utc.clock");
 const uuid = require("uuid");
 
 const commandHandlers = {
