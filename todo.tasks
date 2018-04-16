@@ -1,3 +1,0 @@
-- Separate index.handleCommand / index.handleQuery / index.persistEvent / index.persistCustomer.
-- Update entry point in package.json.
-- DynamoDB scan to retrieve all events by aggregate id;
