@@ -1,5 +1,5 @@
 const { compose, dissoc, pick } = require("ramda");
-const createDatabaseClient = require("./lib/db");
+const createDatabaseClient = require("./framework/db");
 
 const EVENTS = process.env.EVENTS_TABLE;
 const CUSTOMERS = process.env.CUSTOMERS_TABLE;

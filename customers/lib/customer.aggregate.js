@@ -1,7 +1,7 @@
 const defineAggregate = require("bravent").defineAggregate;
 const validate = require("predicado").validate;
 const { compose, contains, prop, map } = require("ramda");
-const now = require("./utc.clock");
+const now = require("./framework/utc.clock");
 const uuid = require("uuid");
 
 const commandHandlers = {

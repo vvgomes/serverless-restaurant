@@ -1,4 +1,4 @@
-service: serverless-cqrs-customers
+service: serverless-restaurant-customers
 
 plugins:
   - serverless-offline-sns
@@ -42,26 +42,26 @@ provider:
     CUSTOMERS_TABLE: 'customers-customers-table-${self:provider.stage}'
 
 functions:
-  signUpCustomer:
-    handler: api.handler
+  handleCommand:
+    handler: lib/commands.handler
     events:
-      - http: 'POST /customers/commands/signup'
-  getCustomer:
-    handler: api.handler
-    events:
-      - http: 'GET /customers/{proxy+}'
-  getCustomers:
-    handler: api.handler
+      - http: 'POST /commands'
+
+  handleQuery:
+    handler: lib/queries.handler
     events:
       - http: 'GET /customers'
+      - http: 'GET /customers/{proxy+}'
+
   persistEvent:
-    handler: listeners.persistEvent
+    handler: lib/listeners.persistEvent
     events:
       - sns:
           topicName: customers-events
           displayName: "Customers domain events"
+
   persistCustomer:
-    handler: listeners.persistCustomer
+    handler: lib/listeners.persistCustomer
     events:
       - sns:
           topicName: customers-events
