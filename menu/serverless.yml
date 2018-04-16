@@ -43,25 +43,25 @@ provider:
 
 functions:
   addMenuItem:
-    handler: api.handler
+    handler: lib/api.handler
     events:
       - http: 'POST /menu/items/commands/add'
   getMenuItem:
-    handler: api.handler
+    handler: lib/api.handler
     events:
       - http: 'GET /menu/items/{proxy+}'
   getMenuItems:
-    handler: api.handler
+    handler: lib/api.handler
     events:
       - http: 'GET /menu/items/'
   persistEvent:
-    handler: listeners.persistEvent
+    handler: lib/listeners.persistEvent
     events:
       - sns:
           topicName: menu-events
           displayName: "Menu domain events"
   persistMenuItem:
-    handler: listeners.persistMenuItem
+    handler: lib/listeners.persistMenuItem
     events:
       - sns:
           topicName: menu-events

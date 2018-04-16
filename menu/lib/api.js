@@ -1,9 +1,9 @@
 const serverless = require("serverless-http");
 const bodyParser = require("body-parser");
 const express = require("express");
-const createDatabaseClient = require("./lib/db");
-const createEventBusClient = require("./lib/bus");
-const MenuItem = require("./lib/menu.item.aggregate");
+const createDatabaseClient = require("./framework/db");
+const createEventBusClient = require("./framework/bus");
+const MenuItem = require("./menu.item.aggregate");
 
 const app = express();
 const db = createDatabaseClient();
