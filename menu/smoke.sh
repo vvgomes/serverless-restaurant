@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SERVICE_URL=http://localhost:3000
-#SERVICE_URL=https://f62hcif4j0.execute-api.us-east-1.amazonaws.com/dev
+#SERVICE_URL=https://o0yr8sx33d.execute-api.us-east-1.amazonaws.com/dev
 
 echo "Menu items:"
 curl -H "Content-Type: application/json" ${SERVICE_URL}/menu/items

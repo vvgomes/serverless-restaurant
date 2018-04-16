@@ -50,12 +50,8 @@ functions:
   handleQuery:
     handler: lib/queries.handler
     events:
-      - http: 'GET /menu/items/{proxy+}'
-
-  getMenuItems:
-    handler: lib/queries.handler
-    events:
       - http: 'GET /menu/items/'
+      - http: 'GET /menu/items/{proxy+}'
 
   persistEvent:
     handler: lib/listeners.persistEvent
