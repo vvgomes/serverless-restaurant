@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 
 SERVICE_URL=http://localhost:3000
-#SERVICE_URL=https://9jdhuu46t9.execute-api.us-east-1.amazonaws.com/dev
+#SERVICE_URL=https://f62hcif4j0.execute-api.us-east-1.amazonaws.com/dev
 
 echo "Menu items:"
 curl -H "Content-Type: application/json" ${SERVICE_URL}/menu/items
 echo
 
 echo "addMenuItem command:"
-curl -H "Content-Type: application/json" -d '{"description":"peperoni", "price":10.0}' ${SERVICE_URL}/menu/items/commands/add
+curl -H "Content-Type: application/json" \
+  -d '{"type":"addMenuItem","payload":{"description":"peperoni", "price":10.0}}' \
+  ${SERVICE_URL}/commands
 echo
 
 sleep 3

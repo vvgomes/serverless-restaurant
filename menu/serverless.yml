@@ -42,24 +42,28 @@ provider:
     MENU_ITEMS_TABLE: 'menu-menu-items-table-${self:provider.stage}'
 
 functions:
-  addMenuItem:
+  handleCommand:
     handler: lib/commands.handler
     events:
-      - http: 'POST /menu/items/commands/add'
-  getMenuItem:
+      - http: 'POST /commands'
+
+  handleQuery:
     handler: lib/queries.handler
     events:
       - http: 'GET /menu/items/{proxy+}'
+
   getMenuItems:
     handler: lib/queries.handler
     events:
       - http: 'GET /menu/items/'
+
   persistEvent:
     handler: lib/listeners.persistEvent
     events:
       - sns:
           topicName: menu-events
           displayName: "Menu domain events"
+
   persistMenuItem:
     handler: lib/listeners.persistMenuItem
     events:
