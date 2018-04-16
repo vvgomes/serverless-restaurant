@@ -1,5 +1,5 @@
-# serverless-cqrs
-Sample CQRS example using AWS Lambda and the Serverless framework 
+# serverless-restaurant
+Sample CQRS example using AWS Lambda and the Serverless framework.
 
 ## Building & Deploying
 ```bash
