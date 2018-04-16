@@ -17,4 +17,3 @@ const app = express()
   });
 
 module.exports.handler = serverless(app);
-
