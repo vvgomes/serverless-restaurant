@@ -1,4 +1,4 @@
-service: serverless-cqrs-menu
+service: serverless-restaurant-menu
 
 plugins:
   - serverless-offline-sns
