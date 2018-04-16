@@ -43,15 +43,15 @@ provider:
 
 functions:
   addMenuItem:
-    handler: lib/api.handler
+    handler: lib/commands.handler
     events:
       - http: 'POST /menu/items/commands/add'
   getMenuItem:
-    handler: lib/api.handler
+    handler: lib/queries.handler
     events:
       - http: 'GET /menu/items/{proxy+}'
   getMenuItems:
-    handler: lib/api.handler
+    handler: lib/queries.handler
     events:
       - http: 'GET /menu/items/'
   persistEvent:

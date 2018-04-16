@@ -3,7 +3,6 @@ const createDatabaseClient = require("./framework/db");
 
 const EVENTS = process.env.EVENTS_TABLE;
 const MENU_ITEMS = process.env.MENU_ITEMS_TABLE;
-
 const db = createDatabaseClient();
 
 const parseEvent = message => {
