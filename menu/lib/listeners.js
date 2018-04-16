@@ -1,9 +1,9 @@
 const { compose, dissoc, pick } = require("ramda");
 const createDatabaseClient = require("./framework/db");
 
+const db = createDatabaseClient();
 const EVENTS = process.env.EVENTS_TABLE;
 const MENU_ITEMS = process.env.MENU_ITEMS_TABLE;
-const db = createDatabaseClient();
 
 const parseEvent = message => {
   const messagePayload = message.Records[0].Sns.Message;
